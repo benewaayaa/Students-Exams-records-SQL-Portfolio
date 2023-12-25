@@ -40,3 +40,142 @@ FROM [dbo].[candidates] C JOIN [dbo].[candidates_marks] CM  ON C.[application_no
 OUTPUT 
 
 ![sceenshot](image/1.16.png)
+
+
+** QUESTION 2:
+
+CALCULATE THE AVERAGE BIOLOGY MARKS FOR CANDIDATES BORN BEFORE THE YEAR 2000.
+
+Identifying the average Biology marks for candidates born pre-2000 reveals performance trends among an older cohort.
+
+CODE
+
+-- ALTERING THE DOB COLUMN TO EXTRACT THE YEAR 
+
+ALTER TABLE [dbo].[candidates] ADD[YEAR] INT;
+UPDATE [dbo].[candidates]
+SET [YEAR] = YEAR([dob])
+
+---  CALCULATE THE AVERAGE BIOLOGY MARKS FOR CANDIDATES BORN BEFORE THE YEAR 2000.
+
+SELECT  C.[application_no] AS [APPLICATION_NUMBERS],C.[name] AS [NAMES OF CANDIDATES],        C.[YEAR], AVG(CM.[biology_marks]) AS [BIOLOGY MARKS] FROM [dbo].[candidates_marks] CM
+JOIN [dbo].[candidates] C ON C.[application_no] = CM.[application_no]
+WHERE YEAR([dob]) < 1999 GROUP BY C.[application_no], C.[name], C.[YEAR];
+
+OUTPUT 
+
+![sceenshot](image/2.png)
+
+
+QUESTION 3:
+
+IDENTIFY CANDIDATES WITH A HIGHSCHOOL_GPA GREATER THAN 3.5 AND PHYSICS_MARKS GREATER THAN 85.
+
+Identifying the average Biology marks for candidates born pre-2000 reveals performance trends among an older cohort.
+
+CODE
+
+SELECT DISTINCT CM.[application_no] AS [APPLICATION NUMBER], C.[name] AS [NAMES OF STUDENTS], CM.[highschool_gpa] AS [STUDENT'S GPA],CM. [physics_marks] AS [PHYSICS MARKS]
+FROM [dbo].[candidates_marks] CM JOIN [dbo].[candidates] C ON C.[application_no] = CM.[application_no] WHERE CM.[highschool_gpa] > 3.5 AND CM.[physics_marks] > 85
+
+
+OUTPUT 
+
+![sceenshot](image/3.png)
+
+QUESTION 4:
+
+FIND THE TOP 10 CANDIDATES WITH THE HIGHEST OVERALL MARKS, CONSIDERING PHYSICS, CHEMISTRY, AND BIOLOGY.
+
+Identifying the top 10 candidates with the highest marks in Physics, Chemistry, and Biology combined reveals exceptional academic performers.
+
+CODE
+
+SELECT TOP 10 C.[application_no] AS [APPLICATION_NUMBERS], C.[name] AS [NAMES OF STUDENTS],
+MAX(CAST(CM.[physics_marks] AS int)) AS [HIGHEST PHYSICS_MARK],MAX(CAST(CM.[chem_marks] AS int)) AS [HIGHEST CHEMISTRY MARK],MAX(CAST(CM.[biology_marks] AS int)) AS [HIGHEST BIOLOGY MARK] FROM [dbo].[candidates] C JOIN [dbo].[candidates_marks] CM ON C.[application_no] = CM.[application_no] GROUP BY C.[application_no], C.[name] ORDER BY MAX(CAST(CM.[physics_marks] AS int)) + MAX(CAST(CM.[chem_marks] AS int)) + MAX(CAST(CM.[biology_marks] AS int)) DESC;
+
+OUTPUT 
+
+![sceenshot](image/4.png)
+
+QUESTION 5:
+
+LIST THE NAMES AND AGES OF CANDIDATES WHO HAVE THE SAME FATHER'S NAME.
+
+Listing names and ages of candidates sharing the same father's name unveils family relationships and potential generational trends.
+
+CODE
+
+SELECT DISTINCT [name] AS [NAME OF CANDIDATES],[dob] AS [DATE OF BIRTH OF CANDIDATES]
+FROM [dbo].[candidates] WHERE [father_name] IN (SELECT [father_name] FROM [dbo].[candidates]
+GROUP BY [father_name] HAVING COUNT(*)>1)
+
+OUTPUT 
+
+![sceenshot](image/5.png)
+
+QUESTION 6:
+
+FIND THE APPLICATION NUMBERS OF CANDIDATES WHO SCORED THE HIGHEST IN CHEMISTRY BUT BELOW 80 IN PHYSICS.
+
+CODE
+
+SELECT CM.[application_no] AS [APPLICATION NUMBERS], C.[name] AS [NAMES OF STUDENTS],
+MAX(CM.[chem_marks]) AS [HIGHEST CHEMISTRY MARK], MAX(CM.[physics_marks]) AS [HIGHEST PHYSICS MARK] FROM [dbo].[candidates_marks] CM JOIN [dbo].[candidates] C
+ON C.[application_no] = CM.[application_no] WHERE CM.[physics_marks] < 80
+GROUP BY CM.[application_no], C.[name] HAVING MAX(CM.[chem_marks]) = (SELECT MAX([chem_marks]) FROM [dbo].[candidates_marks] WHERE [physics_marks] < 80);
+
+OUTPUT 
+
+![sceenshot](image/6.png)
+
+QUESTION 7:
+
+CALCULATE THE TOTAL NUMBER OF CANDIDATES BORN IN EACH YEAR AND MONTH.
+
+Calculating the total candidates born each year and month provides insights into enrollment patterns, aiding in resource allocation and planning.
+
+CODE
+
+SELECT COUNT (*) AS [TOTAL NUMBER OF CONDIDATES],YEAR([dob]) AS [YEAR OF BIRTH], 
+MONTH([dob]) AS [MONTH OF BIRTH] FROM [dbo].[candidates] GROUP BY  YEAR([dob]), MONTH([dob]) ORDER BY [YEAR OF BIRTH] DESC, [MONTH OF BIRTH] DESC
+
+
+OUTPUT 
+
+![sceenshot](image/7.png)
+
+QUESTION 8:
+
+RETRIEVE THE NAMES OF CANDIDATES WHO HAVE BIOLOGY_MARKS GREATER THAN THE AVERAGE FOR CANDIDATES BORN IN THE 1990s.
+
+Retrieving names of candidates with Biology_marks above the average for those born in the 1990s highlights exceptional performance within a specific age group.
+
+CODE
+
+SELECT C.[name] AS [NAME OF CANDIDATES],CM.[biology_marks] AS [BIOLOGY MARKS], AVG(CM.[biology_marks]) AS [AVERAGE BIOLOGY MARKS FOR 1990s] FROM [dbo].[candidates] C 
+JOIN [dbo].[candidates_marks] CM ON C.[application_no] = CM.[application_no] 
+WHERE YEAR(C.[dob]) BETWEEN 1990 AND 1999 GROUP BY C.[name], CM.[biology_marks]HAVING CM.[biology_marks] > AVG(CM.[biology_marks]);
+
+
+OUTPUT 
+
+![sceenshot](image/8.png)
+
+QUESTION 9:
+ 
+IDENTIFY CANDIDATES WHO HAVE THE SAME DATE OF BIRTH BUT DIFFERENT NAMES.
+
+Identifying candidates with the same date of birth but different names unveils potential data inconsistencies or multiple entries for a single individual.
+
+CODE
+
+SELECT [dob] AS [DATE OF BIRTH],COUNT([application_no]) AS [NUMBER OF CANDIDATES], STRING_AGG([name], ', ') AS [NAMES OF CANDIDATES]
+FROM [dbo].[candidates] GROUP BY [dob] HAVING COUNT(DISTINCT [name]) > 1;
+
+OUTPUT 
+
+![sceenshot](image/9.png)
+
+QUESTION 10:
+ 
