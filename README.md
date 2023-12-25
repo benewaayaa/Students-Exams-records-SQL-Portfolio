@@ -39,4 +39,4 @@ FROM [dbo].[candidates] C JOIN [dbo].[candidates_marks] CM  ON C.[application_no
 
 OUTPUT 
 
-[sceenshot!](image/SQLQuery_1.png)
+![sceenshot](image/SQLQuery_1.png)
