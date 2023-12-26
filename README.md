@@ -210,7 +210,7 @@ FROM  [dbo].[candidates_marks]
 
 OUTPUT 
 
-![sceenshot](image/3.png)
+![sceenshot](image/11.png)
 
 
 
