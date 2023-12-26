@@ -163,12 +163,16 @@ OUTPUT
 ![sceenshot](image/8.png)
 
 QUESTION 9:
+
  
 IDENTIFY CANDIDATES WHO HAVE THE SAME DATE OF BIRTH BUT DIFFERENT NAMES.
 
+
 Identifying candidates with the same date of birth but different names unveils potential data inconsistencies or multiple entries for a single individual.
 
+
 CODE
+
 
 SELECT [dob] AS [DATE OF BIRTH],COUNT([application_no]) AS [NUMBER OF CANDIDATES], STRING_AGG([name], ', ') AS [NAMES OF CANDIDATES]
 FROM [dbo].[candidates] GROUP BY [dob] HAVING COUNT(DISTINCT [name]) > 1;
@@ -177,5 +181,79 @@ OUTPUT
 
 ![sceenshot](image/9.png)
 
+
 QUESTION 10:
  
+FIND CANDIDATES WHO HAVE THE SAME PHYSICS_MARKS AND BIOLOGY_MARKS BUT DIFFERENT CHEMISTRY_MARKS.
+
+Identifying candidates with matching Physics_marks and Biology_marks but different Chemistry_marks reveals unique academic profiles and potential subject-specific strengths or weaknesses.
+
+CODE
+
+SELECT DISTINCT C.[name] AS [NAME OF CANDIDATES], C.[application_no] AS [APPLICATION NUMBER], CM.[physics_marks] AS [PHYSICS_MARKS], CM.[chem_marks] AS [CHEMISTRY_MARKS],
+CM.[biology_marks] AS [BIOLOGY_MARKS] FROM [dbo].[candidates] C JOIN [dbo].[candidates_marks] CM ON C.[application_no] = CM.[application_no]
+WHERE CM.[physics_marks] =CM.[physics_marks] AND CM.[biology_marks]=  CM.[biology_marks]
+AND CM.[chem_marks] <> CM.[chem_marks] AND C.[application_no] <> CM.[application_no]
+
+OUTPUT 
+
+![sceenshot](image/10.png)
+
+
+QUESTION 11:
+
+RETRIEVE THE NAMES OF CANDIDATES WHO HAVE THE LOWEST TOTAL MARKS (SUM OF PHYSICS, CHEMISTRY, AND BIOLOGY).
+
+Retrieving names of candidates with the lowest total marks in Physics, Chemistry, and Biology highlights those needing additional academic support or intervention.
+
+CODE
+
+SELECT DISTINCT C.[application_no] AS [APPLICATION_NUMBER], C.[name] AS [NAME OF CANDIDATES],
+CM.[physics_marks] AS [PHYSICS_MARKS], CM.[chem_marks] AS [CHEMISTRY_MARKS], CM.[biology_marks] AS [BIOLOGY_MARKS], (CAST(CM.[physics_marks] AS INT)+ CAST(CM.[chem_marks] AS INT) + CAST(CM.[biology_marks] AS INT)) AS [TOTAL MARKS] FROM [dbo].[candidates] C  JOIN [dbo].[candidates_marks] CM ON C.[application_no] = CM.[application_no] ORDER BY [TOTAL MARKS] DESC
+
+OUTPUT 
+
+![sceenshot](image/11.png)
+
+
+QUESTION 12:
+
+IDENTIFY CANDIDATES WHO HAVE A HIGHSCHOOL_GPA GREATER THAN THE AVERAGE HIGHSCHOOL_GPA OF CANDIDATES BORN IN THE 1980S.
+
+Identifying candidates with a Highschool_GPA surpassing the average for those born in the 1980s reveals outstanding academic performance within that specific age group.
+
+CODE
+
+WITH CandidatesBornIn1980s AS (SELECT [application_no] FROM [dbo].[candidates]
+WHERE YEAR(dob) BETWEEN 1980 AND 1989)
+SELECT DISTINCT C.[application_no] AS [APPLICATION_NUMBER], C.[name] AS [NAME OF CANDIDATES], CM.Highschool_GPA FROM [dbo].[candidates] C JOIN [dbo].[candidates_marks] CM ON C.[application_no] = CM.[application_no] WHERE CM.[highschool_gpa] > (SELECT DISTINCT AVG(CM2.Highschool_GPA) FROM [dbo].[candidates] C2 JOIN [dbo].[candidates_marks] CM2 ON C2.[application_no] = CM2.[application_no] WHERE C2.[application_no] IN (SELECT [application_no] FROM CandidatesBornIn1980s));
+
+
+OUTPUT 
+
+![sceenshot](image/12.png)
+
+
+QUESTION 13:
+
+CALCULATE THE PERCENTAGE OF CANDIDATES WHO HAVE A HIGHSCHOOL_GPA BETWEEN 3.0 AND 3.5.
+
+Calculating the percentage of candidates with Highschool_GPA between 3.0 and 3.5 highlights the prevalence of moderate academic performance within the dataset.
+
+CODE
+
+SELECT CAST(ROUND(COUNT(CASE WHEN [highschool_gpa] BETWEEN 3.0 AND 3.5 THEN 1 ELSE NULL END) * 100.0 / COUNT(*), 2) AS DECIMAL(5, 2)) AS Percentage
+FROM  [dbo].[candidates_marks]
+
+
+OUTPUT 
+
+![sceenshot](image/13.png)
+
+
+
+
+
+
+
+
