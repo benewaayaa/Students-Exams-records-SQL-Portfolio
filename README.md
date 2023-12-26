@@ -177,7 +177,7 @@ FROM [dbo].[candidates] GROUP BY [dob] HAVING COUNT(DISTINCT [name]) > 1;
 
 OUTPUT 
 
-![sceenshot](image/9.png)
+![sceenshot](image/7.png)
 
 
 QUESTION 10:
