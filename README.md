@@ -158,7 +158,7 @@ WHERE YEAR(C.[dob]) BETWEEN 1990 AND 1999 GROUP BY C.[name], CM.[biology_marks]H
 
 OUTPUT 
 
-![sceenshot](image/8.png)
+![sceenshot](image/9.png)
 
 QUESTION 9:
 
