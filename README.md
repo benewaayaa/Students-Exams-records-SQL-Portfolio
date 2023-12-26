@@ -180,7 +180,7 @@ OUTPUT
 ![sceenshot](image/7.png)
 
 
-QUESTION 11:
+QUESTION 10:
 
 RETRIEVE THE NAMES OF CANDIDATES WHO HAVE THE LOWEST TOTAL MARKS (SUM OF PHYSICS, CHEMISTRY, AND BIOLOGY).
 
@@ -193,7 +193,7 @@ CM.[physics_marks] AS [PHYSICS_MARKS], CM.[chem_marks] AS [CHEMISTRY_MARKS], CM.
 
 OUTPUT 
 
-![sceenshot](image/11.png)
+![sceenshot](image/9.png)
 
 
 QUESTION 12:
