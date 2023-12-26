@@ -141,7 +141,7 @@ MONTH([dob]) AS [MONTH OF BIRTH] FROM [dbo].[candidates] GROUP BY  YEAR([dob]), 
 
 OUTPUT 
 
-![sceenshot](image/7.png)
+![sceenshot](image/11.png)
 
 QUESTION 8:
 
