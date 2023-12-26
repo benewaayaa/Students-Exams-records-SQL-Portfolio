@@ -196,25 +196,7 @@ OUTPUT
 ![sceenshot](image/9.png)
 
 
-QUESTION 12:
-
-IDENTIFY CANDIDATES WHO HAVE A HIGHSCHOOL_GPA GREATER THAN THE AVERAGE HIGHSCHOOL_GPA OF CANDIDATES BORN IN THE 1980S.
-
-Identifying candidates with a Highschool_GPA surpassing the average for those born in the 1980s reveals outstanding academic performance within that specific age group.
-
-CODE
-
-WITH CandidatesBornIn1980s AS (SELECT [application_no] FROM [dbo].[candidates]
-WHERE YEAR(dob) BETWEEN 1980 AND 1989)
-SELECT DISTINCT C.[application_no] AS [APPLICATION_NUMBER], C.[name] AS [NAME OF CANDIDATES], CM.Highschool_GPA FROM [dbo].[candidates] C JOIN [dbo].[candidates_marks] CM ON C.[application_no] = CM.[application_no] WHERE CM.[highschool_gpa] > (SELECT DISTINCT AVG(CM2.Highschool_GPA) FROM [dbo].[candidates] C2 JOIN [dbo].[candidates_marks] CM2 ON C2.[application_no] = CM2.[application_no] WHERE C2.[application_no] IN (SELECT [application_no] FROM CandidatesBornIn1980s));
-
-
-OUTPUT 
-
-![sceenshot](image/12.png)
-
-
-QUESTION 13:
+QUESTION 11:
 
 CALCULATE THE PERCENTAGE OF CANDIDATES WHO HAVE A HIGHSCHOOL_GPA BETWEEN 3.0 AND 3.5.
 
@@ -228,7 +210,7 @@ FROM  [dbo].[candidates_marks]
 
 OUTPUT 
 
-![sceenshot](image/13.png)
+![sceenshot](image/3.png)
 
 
 
